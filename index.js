@@ -25,10 +25,7 @@ app.use("/api/incidencias", require("./routes/incidencias"));
 app.use("/api/onlyVentanaOld", require("./routes/onlyVentanaOld"));
 app.use("/api/CommentsVentanas", require("./routes/commentsVentanas"));
 app.use("/api/commentsIncidencia", require("./routes/commentsIncidencia"));
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Error del servidor');
-});
+
 // levantamos el server o app
 app.listen(PORT, () => {
   console.log(`SERVER en port: ${PORT}`);
