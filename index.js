@@ -23,7 +23,7 @@ app.use("/api/weeks", require("./routes/weeks"));
 app.use("/api/ventanas", require("./routes/ventanas"));
 app.use("/api/incidencias", require("./routes/incidencias"));
 app.use("/api/onlyVentanaOld", require("./routes/onlyVentanaOld"));
-app.use("/api/CommentsVentanas", require("./routes/commentsVentanas"));
+app.use("/api/commentsVentanas", require("./routes/commentsVentanas"));
 app.use("/api/commentsIncidencia", require("./routes/commentsIncidencia"));
 
 // levantamos el server o app

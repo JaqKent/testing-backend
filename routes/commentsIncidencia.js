@@ -6,31 +6,31 @@ const auth = require('../middleware/auth');
 const CommentsIncidenciaController = require("../controller/CommentsIncidenciaController");
 
 
-router.post("/:id",
+router.post("/:incidenciaId",
     //  auth,
     CommentsIncidenciaController.crearCommentIncidencia
 );
 
 
-router.get("/:id",
+router.get("/:incidenciaId",
     // auth,
     CommentsIncidenciaController.obtenerCommentsIncidencia
 );
 
 
-router.get("/:id/:id",
+router.get("/:incidenciaId/:commentId",
     // auth,
     CommentsIncidenciaController.obtenerSingleCommentIncidencia
 );
 
 
-router.put("/id/:id",
+router.put("/:incidenciaId/:commentId",
     //auth,
     CommentsIncidenciaController.actualizarCommentIncidencia
 );
 
 
-router.delete("/:id",
+router.delete("/:commentId",
     // auth,
     CommentsIncidenciaController.eliminarCommentIncidencia
 );
