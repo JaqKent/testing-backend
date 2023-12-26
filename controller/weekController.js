@@ -93,6 +93,7 @@ exports.updateWeek = async (req, res) => {
 
         const weekActualizada = {};
 
+
         if (week) {
             if (week.startDate) {
                 weekActualizada.startDate = week.startDate;
@@ -101,44 +102,44 @@ exports.updateWeek = async (req, res) => {
             if (week.endDate) {
                 weekActualizada.endDate = week.endDate;
             }
-
-            const filtro = { _id: req.params.id };
-            const myUpdate = { week: weekActualizada };
-
-            await Week.findOneAndUpdate(filtro, myUpdate);
-            let weekUpdate = await Week.findById(filtro);
-
-            res.json({ weekUpdate });
-
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({ msg: "Hubo un error en el servidor" });
         }
-    };
+        const filtro = { _id: req.params.id };
+        const myUpdate = { week: weekActualizada };
 
+        await Week.findOneAndUpdate(filtro, myUpdate);
+        let weekUpdate = await Week.findById(filtro);
 
+        res.json({ weekUpdate });
 
-    exports.deleteWeek = async (req, res) => {
-        try {
-            const weekId = req.params.id;
-            // eliminar proyecto por id
-
-            // buscar si el proyecto existe, buscar por id
-            // buscar el proyecto en la DB por _id de proyecto que viene por params
-            let weekDelete = await Week.findById(weekId)
-
-            //validar existencia de la busqueda
-            if (!weekDelete) {
-                return res.status(404).json({ msg: "semana no encontrada" })
-            }
-
-            await Week.findByIdAndDelete(weekId)
-
-            res.json({ msg: "Semana eliminada" })
-
-
-        } catch (error) {
-            console.log(error)
-            res.status(500).json({ msg: "Error del servidor" })
-        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ msg: "Hubo un error en el servidor" });
     }
+};
+
+
+
+exports.deleteWeek = async (req, res) => {
+    try {
+        const weekId = req.params.id;
+        // eliminar proyecto por id
+
+        // buscar si el proyecto existe, buscar por id
+        // buscar el proyecto en la DB por _id de proyecto que viene por params
+        let weekDelete = await Week.findById(weekId)
+
+        //validar existencia de la busqueda
+        if (!weekDelete) {
+            return res.status(404).json({ msg: "semana no encontrada" })
+        }
+
+        await Week.findByIdAndDelete(weekId)
+
+        res.json({ msg: "Semana eliminada" })
+
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ msg: "Error del servidor" })
+    }
+}
