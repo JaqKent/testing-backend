@@ -96,6 +96,7 @@ exports.updateWeek = async (req, res) => {
         const { week } = req.body;
 
         const weekActualizada = {};
+        asdasd
         console.log('Semana a actualizar:', weekActualizada);
 
 
