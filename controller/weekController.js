@@ -81,34 +81,28 @@ exports.getSingleWeek = async (req, res) => {
 
 
 
-exports.updateWeek = async (req, res) => {
-    try {
-        const error = validationResult(req);
+const { week } = req.body;
 
-        if (!error.isEmpty()) {
-            return res.status(400).json({ errores: error.array() });
-        }
+const weekActualizada = {};
 
-        const { week } = req.body;
+if (week) {
+    if (week.startDate) {
+        weekActualizada.startDate = week.startDate;
+    }
 
-        const weekActualizada = {};
-
-        if (week) {
-            weekActualizada.week = week;
-        }
-
-        const filtro = { _id: req.params.id };
-        const myUpdate = { week: weekActualizada.week };
-
-        await Week.findOneAndUpdate(filtro, myUpdate);
-        let weekUpdate = await Week.findById(filtro);
-
-        res.json({ weekUpdate });
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ msg: "Hubo un error en el servidor" });
+    if (week.endDate) {
+        weekActualizada.endDate = week.endDate;
     }
 }
+
+const filtro = { _id: req.params.id };
+const myUpdate = { week: weekActualizada };
+
+await Week.findOneAndUpdate(filtro, myUpdate);
+let weekUpdate = await Week.findById(filtro);
+
+res.json({ weekUpdate });
+
 
 
 exports.deleteWeek = async (req, res) => {
