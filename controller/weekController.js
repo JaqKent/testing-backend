@@ -84,6 +84,7 @@ exports.getSingleWeek = async (req, res) => {
 exports.updateWeek = async (req, res) => {
     try {
 
+
         console.log('Semana a actualizar:', weekActualizada);
 
         const error = validationResult(req);
@@ -95,6 +96,7 @@ exports.updateWeek = async (req, res) => {
         const { week } = req.body;
 
         const weekActualizada = {};
+        console.log('Semana a actualizar:', weekActualizada);
 
 
         if (week) {
