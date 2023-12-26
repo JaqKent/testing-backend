@@ -10,7 +10,7 @@ exports.crearWeek = async (req, res) => {
 
         if (!error.isEmpty()) return res.status(400).json({ errores: error.array() });
 
-        const { month, week } = req.body;
+        const { month, startDate, endDate } = req.body;
 
 
         const currentYear = new Date().getFullYear();
@@ -18,7 +18,8 @@ exports.crearWeek = async (req, res) => {
         const weekNueva = new Week({
             year: currentYear,
             month,
-            week,
+            startDate: moment(startDate).toDate(),  // Convierte la cadena a un objeto Date
+            endDate: moment(endDate).toDate(),
         });
 
         await weekNueva.save();

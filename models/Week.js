@@ -9,8 +9,12 @@ const WeekSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    week: {
-        type: String,
+    startDate: {
+        type: Date,
+        required: true,
+    },
+    endDate: {
+        type: Date,
         required: true,
     },
     fechaCreacion: {
