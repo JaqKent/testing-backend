@@ -95,11 +95,13 @@ exports.updateWeek = async (req, res) => {
 
         if (week) {
             if (week.startDate) {
-                weekActualizada.startDate = week.startDate;
+                weekActualizada.startDate = new Date(week.startDate);
+
             }
 
             if (week.endDate) {
-                weekActualizada.endDate = week.endDate;
+                weekActualizada.endDate = new Date(week.endDate);
+
             }
         }
 
@@ -115,7 +117,8 @@ exports.updateWeek = async (req, res) => {
         console.log(error);
         res.status(500).json({ msg: "Hubo un error en el servidor" });
     }
-}
+};
+
 
 
 exports.deleteWeek = async (req, res) => {
