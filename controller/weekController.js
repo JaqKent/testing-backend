@@ -83,6 +83,9 @@ exports.getSingleWeek = async (req, res) => {
 
 exports.updateWeek = async (req, res) => {
     try {
+
+        console.log('Semana a actualizar:', weekActualizada);
+
         const error = validationResult(req);
 
         if (!error.isEmpty()) {
@@ -107,6 +110,9 @@ exports.updateWeek = async (req, res) => {
         const myUpdate = { week: weekActualizada };
 
         await Week.findOneAndUpdate(filtro, myUpdate);
+
+        console.log('Semana actualizada con éxito');
+
         let weekUpdate = await Week.findById(filtro);
 
         res.json({ weekUpdate });
