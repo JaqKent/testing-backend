@@ -83,6 +83,7 @@ exports.getSingleWeek = async (req, res) => {
 
 exports.updateWeek = async (req, res) => {
     try {
+        console.log('Datos recibidos en el backend:', req.body);
 
         const error = validationResult(req);
 
