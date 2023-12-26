@@ -6,9 +6,6 @@ const auth = require('../middleware/auth');
 
 router.post('/',
     // auth,
-    [
-        check('week', 'El Campo es obligatorio').not().isEmpty()
-    ],
     weekController.crearWeek
 )
 
