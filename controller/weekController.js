@@ -93,9 +93,11 @@ exports.updateWeek = async (req, res) => {
 
         const { week } = req.body;
 
+        console.log('Semana a actualizar:', week);
+
         const weekActualizada = {};
 
-        console.log('Semana a actualizar:', weekActualizada);
+
 
 
         if (week) {
@@ -107,6 +109,8 @@ exports.updateWeek = async (req, res) => {
                 weekActualizada.endDate = new Date(week.endDate);
             }
         }
+
+        console.log('Semana a actualizar:', weekActualizada);
         const filtro = { _id: req.params.id };
         const myUpdate = { week: weekActualizada };
 
