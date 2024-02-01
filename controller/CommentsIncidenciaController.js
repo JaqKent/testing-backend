@@ -8,7 +8,7 @@ exports.crearCommentIncidencia = async (req, res) => {
         if (!errors.isEmpty()) return res.status(400).json({ errores: errors.array() });
 
         const { update, usuarioCreador } = req.body;
-        const incidenciaId = req.params.IncidenciaId;
+        const incidenciaId = req.params.incidenciaId;
 
         const currentDate = new Date();
 
@@ -16,7 +16,7 @@ exports.crearCommentIncidencia = async (req, res) => {
             fechaCreacion: currentDate,
             update,
             usuarioCreador,
-            Incidencia: incidenciaId,
+            incidencia: incidenciaId,
         });
 
         await CommentsIncidenciaNueva.save();
@@ -30,9 +30,9 @@ exports.crearCommentIncidencia = async (req, res) => {
 
 exports.obtenerCommentsIncidencia = async (req, res) => {
     try {
-        const IncidenciaId = req.params.IncidenciaId;
+        const incidenciaId = req.params.incidenciaId;
 
-        const comments = await CommentsIncidencia.find({ Incidencia: IncidenciaId }).populate('usuarioCreador');
+        const comments = await CommentsIncidencia.find({ incidencia: incidenciaId }).populate('usuarioCreador');
 
 
         res.json(comments);
@@ -45,11 +45,11 @@ exports.obtenerCommentsIncidencia = async (req, res) => {
 exports.obtenerSingleCommentIncidencia = async (req, res) => {
     try {
         const commentId = req.params.commentId;
-        const IncidenciaId = req.params.IncidenciaId;
+        const incidenciaId = req.params.incidenciaId;
 
         const comment = await CommentsIncidencia.findOne({
             _id: commentId,
-            Incidencia: IncidenciaId,
+            incidencia: incidenciaId,
         }).populate('usuarioCreador');
 
         if (!comment) {
