@@ -1,5 +1,4 @@
 const CommentsVentana = require("../models/CommentsVentana")
-const Windows = require('../models/Ventanas');
 const { validationResult } = require('express-validator');
 
 exports.crearCommentVentana = async (req, res) => {

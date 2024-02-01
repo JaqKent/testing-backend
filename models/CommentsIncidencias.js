@@ -14,7 +14,7 @@ const CommentsIncidenciaSchema = mongoose.Schema({
         type: Date,
         default: Date.now()
     },
-    incidencia: {
+    incidencias: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Incidencia'
     }
