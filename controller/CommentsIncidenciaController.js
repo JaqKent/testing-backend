@@ -32,7 +32,7 @@ exports.obtenerCommentsIncidencia = async (req, res) => {
     try {
         const IncidenciaId = req.params.IncidenciaId;
 
-        const comments = await CommentsIncidencia.find({ Incidencias: IncidenciaId }).populate('usuarioCreador');
+        const comments = await CommentsIncidencia.find({ Incidencia: IncidenciaId }).populate('usuarioCreador');
 
 
         res.json(comments);
