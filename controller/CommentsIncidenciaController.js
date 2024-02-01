@@ -16,7 +16,7 @@ exports.crearCommentIncidencia = async (req, res) => {
             fechaCreacion: currentDate,
             update,
             usuarioCreador,
-            Incidencias: incidenciaId,
+            Incidencia: incidenciaId,
         });
 
         await CommentsIncidenciaNueva.save();
