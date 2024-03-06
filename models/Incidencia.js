@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const IncidenciaSchema = mongoose.Schema({
     incidenciaNumber: {
         type: String,
-        required: true,
+
     },
     year: {
         type: String,
@@ -15,6 +15,7 @@ const IncidenciaSchema = mongoose.Schema({
     },
     descripcion: {
         type: String,
+        required: true,
     },
     criticidad: {
         type: String,
