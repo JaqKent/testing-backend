@@ -100,10 +100,6 @@ exports.obtenerVentana = async (req, res) => {
 };
 
 
-const Windows = require("../models/Ventanas");
-const { validationResult } = require('express-validator');
-const { registrarCambioVentana } = require('./ChangesController');
-
 exports.actualizarVentana = async (req, res) => {
     try {
         const error = validationResult(req);
