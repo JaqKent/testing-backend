@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const CambioSchema = require('./Changes');
 
 const WindowsSchema = mongoose.Schema({
     semana: {
