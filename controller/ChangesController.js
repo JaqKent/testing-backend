@@ -43,9 +43,9 @@ exports.obtenerCambiosIncidencia = async (req, res) => {
 
 
 
-exports.registrarCambioVentana = async (req, res) => {
+exports.registrarCambioVentana = async (req, res, nuevosValores) => {
     try {
-        const { id, nuevosValores } = req.body;
+        const { id } = req.params;
 
         const ventana = await Windows.findById(id);
 

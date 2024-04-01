@@ -100,8 +100,11 @@ exports.obtenerVentana = async (req, res) => {
 };
 
 
-exports.actualizarVentana = async (req, res) => {
+const Windows = require("../models/Ventanas");
+const { validationResult } = require('express-validator');
+const { registrarCambioVentana } = require('./ChangesController');
 
+exports.actualizarVentana = async (req, res) => {
     try {
         const error = validationResult(req);
 
@@ -109,65 +112,62 @@ exports.actualizarVentana = async (req, res) => {
             return res.status(400).json({ errores: error.array() });
         }
 
-        const { enBacklog, semanaDestino, semana, solicitante, descripcion, estado, fechaImplementacion, urgencia, crq, ejecutaTarea, controla, pruebasPost, afectaIdp, impactoNotificacion, ...restoDatos } = req.body;
+        const { id } = req.params;
+        const nuevosValores = req.body; // Los nuevos valores enviados desde el frontend
 
         const ventanaActualizada = {};
 
-        if (enBacklog !== undefined) {
-            ventanaActualizada.enBacklog = enBacklog;
+        if (nuevosValores.enBacklog !== undefined) {
+            ventanaActualizada.enBacklog = nuevosValores.enBacklog;
         }
 
-        if (semana) {
-            ventanaActualizada.semana = semana;
+        if (nuevosValores.semana) {
+            ventanaActualizada.semana = nuevosValores.semana;
         }
 
-        if (solicitante) {
-            ventanaActualizada.solicitante = solicitante;
+        if (nuevosValores.solicitante) {
+            ventanaActualizada.solicitante = nuevosValores.solicitante;
         }
 
-        if (descripcion) {
-            ventanaActualizada.descripcion = descripcion;
+        if (nuevosValores.descripcion) {
+            ventanaActualizada.descripcion = nuevosValores.descripcion;
         }
 
-        if (estado) {
-            ventanaActualizada.estado = estado;
+        if (nuevosValores.estado) {
+            ventanaActualizada.estado = nuevosValores.estado;
         }
 
-        if (fechaImplementacion) {
-            ventanaActualizada.fechaImplementacion = fechaImplementacion;
+        if (nuevosValores.fechaImplementacion) {
+            ventanaActualizada.fechaImplementacion = nuevosValores.fechaImplementacion;
         }
 
-        if (urgencia) {
-            ventanaActualizada.urgencia = urgencia;
+        if (nuevosValores.urgencia) {
+            ventanaActualizada.urgencia = nuevosValores.urgencia;
         }
 
-        if (crq) {
-            ventanaActualizada.crq = crq;
+        if (nuevosValores.crq) {
+            ventanaActualizada.crq = nuevosValores.crq;
         }
 
-        if (ejecutaTarea) {
-            ventanaActualizada.ejecutaTarea = ejecutaTarea;
+        if (nuevosValores.ejecutaTarea) {
+            ventanaActualizada.ejecutaTarea = nuevosValores.ejecutaTarea;
         }
 
-        if (controla) {
-            ventanaActualizada.controla = controla;
+        if (nuevosValores.controla) {
+            ventanaActualizada.controla = nuevosValores.controla;
         }
 
-        if (pruebasPost) {
-            ventanaActualizada.pruebasPost = pruebasPost;
+        if (nuevosValores.pruebasPost) {
+            ventanaActualizada.pruebasPost = nuevosValores.pruebasPost;
         }
 
-        if (afectaIdp) {
-            ventanaActualizada.afectaIdp = afectaIdp;
+        if (nuevosValores.afectaIdp) {
+            ventanaActualizada.afectaIdp = nuevosValores.afectaIdp;
         }
 
-        if (impactoNotificacion) {
-            ventanaActualizada.impactoNotificacion = impactoNotificacion;
+        if (nuevosValores.impactoNotificacion) {
+            ventanaActualizada.impactoNotificacion = nuevosValores.impactoNotificacion;
         }
-
-
-
-        const { id } = req.params;
 
         const ventana = await Windows.findByIdAndUpdate(id, ventanaActualizada, { new: true });
 
@@ -175,7 +175,7 @@ exports.actualizarVentana = async (req, res) => {
             return res.status(404).json({ msg: 'Ventana no encontrada' });
         }
 
-        await registrarCambioVentana(id, nuevosValores);
+        await registrarCambioVentana(req, res);
 
         res.json({ ventana });
     } catch (error) {
@@ -183,6 +183,7 @@ exports.actualizarVentana = async (req, res) => {
         res.status(500).json({ msg: 'Error del servidor' });
     }
 };
+
 
 exports.eliminarVentana = async (req, res) => {
     try {
