@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const cambiosController = require('../controllers/cambiosController');
+const cambiosController = require('../controller/ChangesController');
 
 router.post('/cambio', cambiosController.registrarCambioIncidencia);
 
