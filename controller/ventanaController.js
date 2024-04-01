@@ -3,6 +3,7 @@ const bcryptsjs = require('bcryptjs');
 const { validationResult } = require('express-validator');
 const Week = require('../models/Week');
 const Windows = require('../models/Ventanas');
+const { registrarCambioVentana } = require('./ChangesController');
 
 exports.crearVentanas = async (req, res) => {
     try {
@@ -173,6 +174,8 @@ exports.actualizarVentana = async (req, res) => {
         if (!ventana) {
             return res.status(404).json({ msg: 'Ventana no encontrada' });
         }
+
+        await registrarCambioVentana(id, nuevosValores);
 
         res.json({ ventana });
     } catch (error) {

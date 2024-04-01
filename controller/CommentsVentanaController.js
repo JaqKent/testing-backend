@@ -1,5 +1,7 @@
 const CommentsVentana = require("../models/CommentsVentana")
 const { validationResult } = require('express-validator');
+const { registrarCambioCommentsVentana } = require('./ChangesController');
+const cambiosController = require('./ChangesController');
 
 exports.crearCommentVentana = async (req, res) => {
     try {
@@ -20,6 +22,8 @@ exports.crearCommentVentana = async (req, res) => {
         });
 
         await CommentsVentanaNueva.save();
+
+        await cambiosController.registrarCambioCommentsVentana(req, res);
 
         res.json(CommentsVentanaNueva);
     } catch (error) {
@@ -83,6 +87,8 @@ exports.actualizarCommentVentana = async (req, res) => {
         if (!updatedComment) {
             return res.status(404).json({ msg: 'Comentario no encontrado' });
         }
+
+        await registrarCambioCommentsVentana(commentId, update);
 
         res.json(updatedComment);
     } catch (error) {
