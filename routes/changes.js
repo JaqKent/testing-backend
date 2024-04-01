@@ -2,13 +2,13 @@ const express = require('express');
 const router = express.Router();
 const cambiosController = require('../controller/ChangesController');
 
-router.post('/cambio', cambiosController.registrarCambioIncidencia);
+router.post('/incidencia/cambio', cambiosController.registrarCambioIncidencia);
 
-router.get('/:id/cambios', cambiosController.obtenerCambiosIncidencia);
+router.get('/incidencia/:id/cambios', cambiosController.obtenerCambiosIncidencia);
 
-router.post('/cambio', cambiosController.registrarCambioVentana);
+router.post('/ventana/cambio', cambiosController.registrarCambioVentana);
 
-router.get('/:id/cambios', cambiosController.obtenerCambiosVentana);
+router.get('/ventana/:id/cambios', cambiosController.obtenerCambiosVentana);
 
 router.post('/:incidenciaId/:commentId/cambio', cambiosController.registrarCambioCommentsIncidencia);
 
