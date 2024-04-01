@@ -17,7 +17,8 @@ const CommentsVentanaSchema = mongoose.Schema({
     ventanas: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Windows'
-    }
+    },
+    cambios: [CambioSchema]
 })
 
 module.exports = mongoose.model('CommentsVentana', CommentsVentanaSchema);

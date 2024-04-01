@@ -25,7 +25,7 @@ app.use("/api/incidencias", require("./routes/incidencias"));
 app.use("/api/onlyVentanaOld", require("./routes/onlyVentanaOld"));
 app.use("/api/commentsVentanas", require("./routes/commentsVentanas"));
 app.use("/api/commentsIncidencia", require("./routes/commentsIncidencia"));
-
+app.use("/api/cambios", require("./routes/changes"));
 // levantamos el server o app
 app.listen(PORT, () => {
   console.log(`SERVER en port: ${PORT}`);

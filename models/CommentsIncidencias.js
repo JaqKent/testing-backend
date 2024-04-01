@@ -17,7 +17,8 @@ const CommentsIncidenciaSchema = mongoose.Schema({
     incidencias: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Incidencia'
-    }
+    },
+    cambios: [CambioSchema]
 })
 
 module.exports = mongoose.model('CommentsIncidencia', CommentsIncidenciaSchema);

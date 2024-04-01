@@ -39,7 +39,8 @@ const IncidenciaSchema = mongoose.Schema({
     enBacklog: {
         type: Boolean,
         default: false
-    }
+    },
+    cambios: [CambioSchema]
 
 })
 

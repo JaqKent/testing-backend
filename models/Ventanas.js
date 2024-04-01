@@ -51,6 +51,7 @@ const WindowsSchema = mongoose.Schema({
         require: true
     },
     enBacklog: { type: Boolean, default: false },
+    cambios: [CambioSchema]
 
 
 })
