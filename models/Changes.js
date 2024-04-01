@@ -10,13 +10,13 @@ const CambioSchema = mongoose.Schema({
         required: true
     },
     valorAnterior: {
-        type: String,
+        type: mongoose.Schema.Types.Mixed,
     },
     valorNuevo: {
-        type: String,
+        type: mongoose.Schema.Types.Mixed,
         required: true
     }
-
 });
+
 
 module.exports = mongoose.model('Cambios', CambioSchema);
