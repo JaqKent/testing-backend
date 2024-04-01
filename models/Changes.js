@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const CambioSchema = mongoose.Schema({
     fecha: {
         type: Date,
@@ -16,3 +18,5 @@ const CambioSchema = mongoose.Schema({
     }
 
 });
+
+module.exports = mongoose.model('Cambios', CambioSchema);
