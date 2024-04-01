@@ -19,4 +19,4 @@ const CambioSchema = mongoose.Schema({
 });
 
 
-module.exports = mongoose.model('Cambios', CambioSchema);
+module.exports = CambioSchema;
