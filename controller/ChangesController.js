@@ -69,7 +69,9 @@ exports.registrarCambioVentana = async (req, nuevosValores) => {
             }
         }
 
-        ventana.cambios = cambios;
+        if (cambios.length > 0) {
+            ventana.cambios = cambios;
+        }
 
         await ventana.save();
 
