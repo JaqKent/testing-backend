@@ -109,61 +109,9 @@ exports.actualizarVentana = async (req, res) => {
         }
 
         const { id } = req.params;
-        const nuevosValores = req.body; // Los nuevos valores enviados desde el frontend
+        const nuevosValores = req.body;
 
         const ventanaActualizada = {};
-
-        if (nuevosValores.enBacklog !== undefined) {
-            ventanaActualizada.enBacklog = nuevosValores.enBacklog;
-        }
-
-        if (nuevosValores.semana) {
-            ventanaActualizada.semana = nuevosValores.semana;
-        }
-
-        if (nuevosValores.solicitante) {
-            ventanaActualizada.solicitante = nuevosValores.solicitante;
-        }
-
-        if (nuevosValores.descripcion) {
-            ventanaActualizada.descripcion = nuevosValores.descripcion;
-        }
-
-        if (nuevosValores.estado) {
-            ventanaActualizada.estado = nuevosValores.estado;
-        }
-
-        if (nuevosValores.fechaImplementacion) {
-            ventanaActualizada.fechaImplementacion = nuevosValores.fechaImplementacion;
-        }
-
-        if (nuevosValores.urgencia) {
-            ventanaActualizada.urgencia = nuevosValores.urgencia;
-        }
-
-        if (nuevosValores.crq) {
-            ventanaActualizada.crq = nuevosValores.crq;
-        }
-
-        if (nuevosValores.ejecutaTarea) {
-            ventanaActualizada.ejecutaTarea = nuevosValores.ejecutaTarea;
-        }
-
-        if (nuevosValores.controla) {
-            ventanaActualizada.controla = nuevosValores.controla;
-        }
-
-        if (nuevosValores.pruebasPost) {
-            ventanaActualizada.pruebasPost = nuevosValores.pruebasPost;
-        }
-
-        if (nuevosValores.afectaIdp) {
-            ventanaActualizada.afectaIdp = nuevosValores.afectaIdp;
-        }
-
-        if (nuevosValores.impactoNotificacion) {
-            ventanaActualizada.impactoNotificacion = nuevosValores.impactoNotificacion;
-        }
 
         const ventana = await Windows.findByIdAndUpdate(id, ventanaActualizada, { new: true });
 
@@ -171,9 +119,9 @@ exports.actualizarVentana = async (req, res) => {
             return res.status(404).json({ msg: 'Ventana no encontrada' });
         }
 
-        await registrarCambioVentana(req, res);
+        const cambios = await registrarCambioVentana(req, nuevosValores);
 
-        res.json({ ventana });
+        res.json({ ventana, cambios });
     } catch (error) {
         console.log(error);
         res.status(500).json({ msg: 'Error del servidor' });

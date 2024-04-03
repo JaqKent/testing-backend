@@ -43,15 +43,16 @@ exports.obtenerCambiosIncidencia = async (req, res) => {
 
 
 
-exports.registrarCambioVentana = async (req, res, nuevosValores) => {
+exports.registrarCambioVentana = async (req, nuevosValores) => {
     try {
         const { id } = req.params;
 
         const ventana = await Windows.findById(id);
+        const cambios = [];
 
         for (let campo in nuevosValores) {
             if (ventana[campo] !== nuevosValores[campo]) {
-                ventana.cambios.push({
+                cambios.push({
                     campo: campo,
                     valorAnterior: ventana[campo],
                     valorNuevo: nuevosValores[campo],
@@ -63,9 +64,9 @@ exports.registrarCambioVentana = async (req, res, nuevosValores) => {
 
         await ventana.save();
 
-        res.status(200).json({ message: 'Cambios registrados con éxito' });
+        return cambios;
     } catch (error) {
-        res.status(500).json({ error: 'Hubo un error al registrar los cambios' });
+        throw new Error('Hubo un error al registrar los cambios');
     }
 };
 
