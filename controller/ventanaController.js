@@ -102,6 +102,7 @@ exports.obtenerVentana = async (req, res) => {
 
 exports.actualizarVentana = async (req, res) => {
     try {
+
         const error = validationResult(req);
 
         if (!error.isEmpty()) {
