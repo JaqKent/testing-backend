@@ -109,7 +109,6 @@ exports.actualizarVentana = async (req, res) => {
         }
 
         const { id } = req.params;
-        const nuevosValores = req.body;
 
         const ventanaActualizada = {};
 
@@ -119,7 +118,7 @@ exports.actualizarVentana = async (req, res) => {
             return res.status(404).json({ msg: 'Ventana no encontrada' });
         }
 
-        res.json({ ventana, cambios });
+        res.json({ ventana });
     } catch (error) {
         console.log(error);
         res.status(500).json({ msg: 'Error del servidor' });
