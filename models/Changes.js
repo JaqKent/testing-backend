@@ -15,12 +15,20 @@ const CambioSchema = mongoose.Schema({
         enum: ['ventana', 'incidencia'],
         required: true
     },
-    cambios: {
-        type: mongoose.Schema.Types.Mixed,
-        required: true
-    }
+    cambios: [{
+        campo: {
+            type: String,
+            required: true
+        },
+        valorAnterior: {
+            type: mongoose.Schema.Types.Mixed
+        },
+        valorNuevo: {
+            type: mongoose.Schema.Types.Mixed
+        }
+    }]
 });
 
-CambioSchema.index({ fecha: 1 });
+CambioSchema.index({ elementoId: 1 });
 
 module.exports = mongoose.model('Cambio', CambioSchema);

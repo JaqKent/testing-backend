@@ -60,34 +60,79 @@ const WindowsSchema = mongoose.Schema({
 });
 
 
-WindowsSchema.pre('save', async function (next) {
-    if (this.isModified()) {
-        const cambios = this.modifiedPaths().filter(path => path !== 'cambios');
-        this.cambios = cambios.map(campo => ({
-            campo,
-            valorAnterior: this._original[campo],
-            valorNuevo: this[campo]
-        }));
+WindowsSchema.pre('findOneAndUpdate', async function () {
+    try {
+        // Obtener el documento antes de la actualización y almacenarlo en la instancia
+        this._oldDocument = await this.model.findOne(this.getQuery());
+    } catch (error) {
+        console.error('Error al obtener el documento antes de la actualización:', error);
     }
-    next();
 });
-
 
 WindowsSchema.post('findOneAndUpdate', async function (doc) {
     try {
-        if (this._update && Object.keys(this._update).length > 0) {
-            const cambios = Object.keys(this._update);
-            const cambiosRegistrados = cambios.map(campo => ({
-                campo,
-                valorAnterior: doc._doc[campo],
-                valorNuevo: this._update[campo]
-            }));
-            await this.findByIdAndUpdate(doc._id, { $push: { cambios: { $each: cambiosRegistrados } } });
+        // Acceder al documento antes de la actualización desde la instancia
+        const oldDoc = this._oldDocument;
+        console.log('Documento antes de la actualización:', oldDoc);
+
+        // Comparar los valores antes y después de la actualización
+        const cambiosRegistrados = [];
+
+        for (const campo in oldDoc._doc) {
+            if (oldDoc._doc.hasOwnProperty(campo)) {
+                // Ignorar el campo _id
+                if (campo === '_id') continue;
+
+                // Ignorar el campo semana si no está presente en el body
+                if (campo === 'semana' && !this._update.$set.hasOwnProperty('semana')) continue;
+
+                const valorAnterior = oldDoc._doc[campo];
+                const valorNuevo = doc[campo];
+
+                // Verificar si el valor ha cambiado
+                if (valorAnterior !== valorNuevo) {
+                    cambiosRegistrados.push({
+                        campo,
+                        valorAnterior,
+                        valorNuevo
+                    });
+                }
+            }
+        }
+
+        // Guardar los cambios en la colección de Cambio
+        if (cambiosRegistrados.length > 0) {
+            console.log('Se han registrado cambios:', cambiosRegistrados);
+            await Cambio.create({
+                elementoId: doc._id,
+                tipoElemento: 'ventana',
+                cambios: cambiosRegistrados
+            });
+        } else {
+            console.log('No se han detectado cambios');
         }
     } catch (error) {
         console.error('Error al registrar cambios:', error);
     }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 module.exports = mongoose.model('Windows', WindowsSchema);
