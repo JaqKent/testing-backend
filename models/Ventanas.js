@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const CambioSchema = require('./Changes');
+const Cambio = require('./Changes');
 
 const WindowsSchema = mongoose.Schema({
     semana: {
@@ -10,57 +10,79 @@ const WindowsSchema = mongoose.Schema({
     solicitante: {
         type: String,
         trim: true,
-        require: true
+        required: true
     },
     descripcion: {
         type: String
     },
     estado: {
         type: String,
-        require: true
+        required: true
     },
     fechaImplementacion: {
         type: String,
-        require: true
+        required: true
     },
     urgencia: {
         type: String,
-        require: true
+        required: true
     },
     crq: {
         type: String,
-        require: true
+        required: true
     },
     ejecutaTarea: {
         type: String,
-        require: true
+        required: true
     },
     controla: {
         type: String,
-        require: true
+        required: true
     },
     pruebasPost: {
         type: String,
-        require: true
+        required: true
     },
     afectaIdp: {
         type: String,
-        require: true
+        required: true
     },
     impactoNotificacion: {
         type: String,
-        require: true
+        required: true
     },
     enBacklog: { type: Boolean, default: false },
-    cambios: [CambioSchema]
+
+    cambios: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Cambio'
+    }]
+});
 
 
-})
 WindowsSchema.pre('save', async function (next) {
-    if (this.semana && this.semana._id) {
-        this.semana = this.semana._id;
+    if (this.isModified()) {
+        const cambios = this.modifiedPaths().filter(path => path !== 'cambios');
+        this.cambios = cambios.map(campo => ({
+            campo,
+            valorAnterior: this._original[campo],
+            valorNuevo: this[campo]
+        }));
     }
     next();
+});
+
+
+WindowsSchema.post('findOneAndUpdate', async function (doc) {
+    try {
+        if (this._update && Object.keys(this._update).length > 0) {
+            const cambios = Object.keys(this._update);
+            const cambiosRegistrados = await registrarCambios(doc._id, 'ventana', cambios);
+            await Windows.findByIdAndUpdate(doc._id, { $push: { cambios: { $each: cambiosRegistrados.map(cambio => cambio._id) } } });
+        }
+    } catch (error) {
+        console.error('Error al registrar cambios:', error);
+    }
 });
 
 module.exports = mongoose.model('Windows', WindowsSchema);

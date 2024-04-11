@@ -2,6 +2,7 @@ const Incidencia = require('../models/Incidencia');
 const Windows = require("../models/Ventanas")
 const CommentsIncidencia = require("../models/CommentsIncidencias")
 const CommentsVentana = require("../models/CommentsVentana");
+const cambio = require("../models/Changes")
 
 exports.registrarCambioIncidencia = async (req, res) => {
     try {
@@ -9,23 +10,20 @@ exports.registrarCambioIncidencia = async (req, res) => {
 
         const incidencia = await Incidencia.findById(id);
 
-        for (let campo in nuevosValores) {
-            if (incidencia[campo] !== nuevosValores[campo]) {
-                incidencia.cambios.push({
-                    campo: campo,
-                    valorAnterior: incidencia[campo],
-                    valorNuevo: nuevosValores[campo],
-                });
+        const cambio = new Cambio({
+            elementoId: incidencia._id,
+            tipoElemento: 'incidencia',
+            cambios: nuevosValores
+        });
 
-                incidencia[campo] = nuevosValores[campo];
-            }
-        }
+        await cambio.save();
 
+        incidencia.cambios.push(cambio._id);
         await incidencia.save();
 
-        res.status(200).json({ message: 'Cambios registrados con éxito' });
+        res.status(200).json({ message: 'Cambio registrado con éxito' });
     } catch (error) {
-        res.status(500).json({ error: 'Hubo un error al registrar los cambios' });
+        res.status(500).json({ error: 'Hubo un error al registrar el cambio' });
     }
 };
 
@@ -33,7 +31,7 @@ exports.obtenerCambiosIncidencia = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const incidencia = await Incidencia.findById(id);
+        const incidencia = await Incidencia.findById(id).populate('cambios');
 
         res.status(200).json({ cambios: incidencia.cambios });
     } catch (error) {
@@ -43,50 +41,37 @@ exports.obtenerCambiosIncidencia = async (req, res) => {
 
 
 
-exports.registrarCambioVentana = async (req, nuevosValores) => {
-    try {
 
-        const { id } = req.params;
+exports.registrarCambioVentana = async (req, res) => {
+    try {
+        const { id, nuevosValores } = req.body;
 
         const ventana = await Windows.findById(id);
 
-        const cambios = [];
+        const cambio = new Cambio({
+            elementoId: ventana._id,
+            tipoElemento: 'ventana',
+            cambios: nuevosValores
+        });
 
-        for (let campo in nuevosValores) {
-            if (campo === 'semana') {
-                continue;
-            }
+        await cambio.save();
 
-            if (ventana[campo] !== nuevosValores[campo]) {
-
-                cambios.push({
-                    campo: campo,
-                    valorAnterior: ventana[campo],
-                    valorNuevo: nuevosValores[campo],
-                });
-
-                ventana[campo] = nuevosValores[campo];
-            }
-        }
-
-        if (cambios.length > 0) {
-            ventana.cambios = cambios;
-        }
-
+        ventana.cambios.push(cambio._id);
         await ventana.save();
 
-        return cambios;
+        res.status(200).json({ message: 'Cambio registrado con éxito' });
     } catch (error) {
-        throw new Error('Hubo un error al registrar los cambios', error);
+        res.status(500).json({ error: 'Hubo un error al registrar el cambio' });
     }
 };
+
 
 
 exports.obtenerCambiosVentana = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const ventana = await Windows.findById(id);
+        const ventana = await Windows.findById(id).populate('cambios');
 
         res.status(200).json({ cambios: ventana.cambios });
     } catch (error) {
@@ -95,39 +80,38 @@ exports.obtenerCambiosVentana = async (req, res) => {
 };
 
 
+
 exports.registrarCambioCommentsIncidencia = async (req, res) => {
     try {
         const { id, nuevosValores } = req.body;
 
-        const commentsIncidencia = await CommentsIncidencia.findById(id);
+        const commentIncidencia = await CommentsIncidencia.findById(id);
 
-        for (let campo in nuevosValores) {
-            if (commentsIncidencia[campo] !== nuevosValores[campo]) {
-                commentsIncidencia.cambios.push({
-                    campo: campo,
-                    valorAnterior: commentsIncidencia[campo],
-                    valorNuevo: nuevosValores[campo],
-                });
+        const cambio = new Cambio({
+            elementoId: commentIncidencia._id,
+            tipoElemento: 'comment_incidencia',
+            cambios: nuevosValores
+        });
 
-                commentsIncidencia[campo] = nuevosValores[campo];
-            }
-        }
+        await cambio.save();
 
-        await commentsIncidencia.save();
+        commentIncidencia.cambios.push(cambio._id);
+        await commentIncidencia.save();
 
-        res.status(200).json({ message: 'Cambios registrados con éxito' });
+        res.status(200).json({ message: 'Cambio registrado con éxito' });
     } catch (error) {
-        res.status(500).json({ error: 'Hubo un error al registrar los cambios' });
+        res.status(500).json({ error: 'Hubo un error al registrar el cambio' });
     }
 };
+
 
 exports.obtenerCambiosCommentsIncidencia = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const commentsIncidencia = await CommentsIncidencia.findById(id);
+        const commentIncidencia = await CommentsIncidencia.findById(id).populate('cambios');
 
-        res.status(200).json({ cambios: commentsIncidencia.cambios });
+        res.status(200).json({ cambios: commentIncidencia.cambios });
     } catch (error) {
         res.status(500).json({ error: 'Hubo un error al obtener los cambios' });
     }
@@ -138,37 +122,34 @@ exports.registrarCambioCommentsVentana = async (req, res) => {
     try {
         const { id, nuevosValores } = req.body;
 
-        const commentsVentana = await CommentsVentana.findById(id);
+        const commentVentana = await CommentsVentana.findById(id);
 
-        for (let campo in nuevosValores) {
-            if (commentsVentana[campo] !== nuevosValores[campo]) {
-                commentsVentana.cambios.push({
-                    campo: campo,
-                    valorAnterior: commentsVentana[campo],
-                    valorNuevo: nuevosValores[campo],
-                });
+        const cambio = new Cambio({
+            elementoId: commentVentana._id,
+            tipoElemento: 'comment_ventana',
+            cambios: nuevosValores
+        });
 
-                commentsVentana[campo] = nuevosValores[campo];
-            }
-        }
+        await cambio.save();
 
-        await commentsVentana.save();
+        commentVentana.cambios.push(cambio._id);
+        await commentVentana.save();
 
-        res.status(200).json({ message: 'Cambios registrados con éxito' });
+        res.status(200).json({ message: 'Cambio registrado con éxito' });
     } catch (error) {
-        res.status(500).json({ error: 'Hubo un error al registrar los cambios' });
+        res.status(500).json({ error: 'Hubo un error al registrar el cambio' });
     }
 };
+
 
 exports.obtenerCambiosCommentsVentana = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const commentsVentana = await CommentsVentana.findById(id);
+        const commentVentana = await CommentsVentana.findById(id).populate('cambios');
 
-        res.status(200).json({ cambios: commentsVentana.cambios });
+        res.status(200).json({ cambios: commentVentana.cambios });
     } catch (error) {
         res.status(500).json({ error: 'Hubo un error al obtener los cambios' });
     }
 };
-
