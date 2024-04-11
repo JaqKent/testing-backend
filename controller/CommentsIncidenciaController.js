@@ -1,7 +1,5 @@
 const CommentsIncidencia = require("../models/CommentsIncidencias")
 const { validationResult } = require('express-validator');
-const { registrarCambioCommentsIncidencia } = require('./ChangesController');
-const cambiosController = require('./ChangesController');
 
 exports.crearCommentIncidencia = async (req, res) => {
     try {
@@ -22,8 +20,6 @@ exports.crearCommentIncidencia = async (req, res) => {
         });
 
         await CommentsIncidenciaNueva.save();
-
-        await cambiosController.registrarCambioCommentsIncidencia(req, res);
 
         res.json(CommentsIncidenciaNueva);
     } catch (error) {
@@ -88,14 +84,13 @@ exports.actualizarCommentIncidencia = async (req, res) => {
             return res.status(404).json({ msg: 'Comentario no encontrado' });
         }
 
-        await registrarCambioCommentsIncidencia(commentId, update);
-
         res.json(updatedComment);
     } catch (error) {
         console.log(error);
         res.status(500).json({ msg: 'Error del servidor' });
     }
 };
+
 
 exports.eliminarCommentIncidencia = async (req, res) => {
     try {

@@ -1,6 +1,5 @@
 const { validationResult } = require('express-validator');
 const Incidencia = require("../models/Incidencia");
-const { registrarCambioIncidencia } = require("./ChangesController");
 
 exports.crearIncidencia = async (req, res) => {
     try {
@@ -78,7 +77,6 @@ exports.actualizarIncidencias = async (req, res) => {
         if (!incidencia) {
             return res.status(404).json({ msg: 'Incidencia no encontrada' });
         }
-        await registrarCambioIncidencia(id, nuevosValores);
 
         res.json({ incidencia });
     } catch (error) {
