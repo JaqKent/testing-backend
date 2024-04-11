@@ -79,7 +79,7 @@ IncidenciaSchema.post('findOneAndUpdate', async function (doc) {
                 valorAnterior: doc._doc[campo],
                 valorNuevo: this._update[campo]
             }));
-            await Incidencia.findByIdAndUpdate(doc._id, { $push: { cambios: { $each: cambiosRegistrados } } });
+            await this.findByIdAndUpdate(doc._id, { $push: { cambios: { $each: cambiosRegistrados } } });
         }
     } catch (error) {
         console.error('Error al registrar cambios después de actualizar la incidencia:', error);
