@@ -77,12 +77,17 @@ WindowsSchema.post('findOneAndUpdate', async function (doc) {
     try {
         if (this._update && Object.keys(this._update).length > 0) {
             const cambios = Object.keys(this._update);
-            const cambiosRegistrados = await registrarCambios(doc._id, 'ventana', cambios);
-            await Windows.findByIdAndUpdate(doc._id, { $push: { cambios: { $each: cambiosRegistrados.map(cambio => cambio._id) } } });
+            const cambiosRegistrados = cambios.map(campo => ({
+                campo,
+                valorAnterior: doc._doc[campo],
+                valorNuevo: this._update[campo]
+            }));
+            await Windows.findByIdAndUpdate(doc._id, { $push: { cambios: { $each: cambiosRegistrados } } });
         }
     } catch (error) {
         console.error('Error al registrar cambios:', error);
     }
 });
+
 
 module.exports = mongoose.model('Windows', WindowsSchema);

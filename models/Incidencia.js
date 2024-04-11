@@ -51,15 +51,17 @@ const IncidenciaSchema = mongoose.Schema({
 IncidenciaSchema.pre('save', async function (next) {
     try {
         if (this.isNew) {
-            // Si es una nueva incidencia, no hay cambios registrados
+
             return next();
         }
 
         const cambios = this.modifiedPaths().filter(path => path !== 'cambios');
         if (cambios.length > 0) {
-
-            const cambiosRegistrados = await registrarCambios(this._id, 'incidencia', cambios);
-            this.cambios = cambiosRegistrados.map(cambio => cambio._id);
+            this.cambios = cambios.map(campo => ({
+                campo,
+                valorAnterior: this._original[campo],
+                valorNuevo: this[campo]
+            }));
         }
         next();
     } catch (error) {
@@ -68,18 +70,21 @@ IncidenciaSchema.pre('save', async function (next) {
     }
 });
 
-
 IncidenciaSchema.post('findOneAndUpdate', async function (doc) {
     try {
         if (this._update && Object.keys(this._update).length > 0) {
-
             const cambios = Object.keys(this._update);
-            const cambiosRegistrados = await registrarCambios(doc._id, 'incidencia', cambios);
-            await Incidencia.findByIdAndUpdate(doc._id, { $push: { cambios: { $each: cambiosRegistrados.map(cambio => cambio._id) } } });
+            const cambiosRegistrados = cambios.map(campo => ({
+                campo,
+                valorAnterior: doc._doc[campo],
+                valorNuevo: this._update[campo]
+            }));
+            await Incidencia.findByIdAndUpdate(doc._id, { $push: { cambios: { $each: cambiosRegistrados } } });
         }
     } catch (error) {
         console.error('Error al registrar cambios después de actualizar la incidencia:', error);
     }
-})
+});
+
 
 module.exports = mongoose.model('Incidencia', IncidenciaSchema);
