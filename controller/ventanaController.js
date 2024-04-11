@@ -100,17 +100,73 @@ exports.obtenerVentana = async (req, res) => {
 
 
 exports.actualizarVentana = async (req, res) => {
-    try {
 
+    try {
         const error = validationResult(req);
 
         if (!error.isEmpty()) {
             return res.status(400).json({ errores: error.array() });
         }
 
-        const { id } = req.params;
+        const { enBacklog, semanaDestino, semana, solicitante, descripcion, estado, fechaImplementacion, urgencia, crq, ejecutaTarea, controla, pruebasPost, afectaIdp, impactoNotificacion, ...restoDatos } = req.body;
 
-        const ventanaActualizada = req.body;
+        const ventanaActualizada = {};
+
+        if (enBacklog !== undefined) {
+            ventanaActualizada.enBacklog = enBacklog;
+        }
+
+        if (semana) {
+            ventanaActualizada.semana = semana;
+        }
+
+        if (solicitante) {
+            ventanaActualizada.solicitante = solicitante;
+        }
+
+        if (descripcion) {
+            ventanaActualizada.descripcion = descripcion;
+        }
+
+        if (estado) {
+            ventanaActualizada.estado = estado;
+        }
+
+        if (fechaImplementacion) {
+            ventanaActualizada.fechaImplementacion = fechaImplementacion;
+        }
+
+        if (urgencia) {
+            ventanaActualizada.urgencia = urgencia;
+        }
+
+        if (crq) {
+            ventanaActualizada.crq = crq;
+        }
+
+        if (ejecutaTarea) {
+            ventanaActualizada.ejecutaTarea = ejecutaTarea;
+        }
+
+        if (controla) {
+            ventanaActualizada.controla = controla;
+        }
+
+        if (pruebasPost) {
+            ventanaActualizada.pruebasPost = pruebasPost;
+        }
+
+        if (afectaIdp) {
+            ventanaActualizada.afectaIdp = afectaIdp;
+        }
+
+        if (impactoNotificacion) {
+            ventanaActualizada.impactoNotificacion = impactoNotificacion;
+        }
+
+
+
+        const { id } = req.params;
 
         const ventana = await Windows.findByIdAndUpdate(id, ventanaActualizada, { new: true });
 
