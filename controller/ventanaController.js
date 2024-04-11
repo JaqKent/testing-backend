@@ -110,7 +110,7 @@ exports.actualizarVentana = async (req, res) => {
 
         const { id } = req.params;
 
-        const ventanaActualizada = {};
+        const ventanaActualizada = req.body;
 
         const ventana = await Windows.findByIdAndUpdate(id, ventanaActualizada, { new: true });
 
