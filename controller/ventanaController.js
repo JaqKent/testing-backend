@@ -115,7 +115,7 @@ exports.actualizarVentana = async (req, res) => {
         fieldsToUpdate.forEach(field => {
             if (req.body[field] !== undefined) {
                 if (field === 'semana' && req.body[field] === '') {
-                    return; // Si `semana` es un string vacío, omitir su actualización
+                    return;
                 }
                 updateFields.$set[field] = req.body[field];
             }

@@ -12,8 +12,16 @@ const CambioSchema = mongoose.Schema({
     },
     tipoElemento: {
         type: String,
-        enum: ['ventana', 'incidencia'],
+        enum: ['ventana', 'incidencia', "commentVentana", "commentIncidencia"],
         required: true
+    },
+    ventana: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Windows'
+    },
+    incidencias: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Incidencia'
     },
     cambios: [{
         campo: {
