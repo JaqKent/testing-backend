@@ -13,13 +13,25 @@ exports.obtenerCambiosIncidencia = async (req, res) => {
     }
 };
 
-exports.obtenerCambiosVentana = async (req, res) => {
+exports.obtenerCambiosVentanaPorFecha = async (req, res) => {
     try {
-        const { id } = req.params;
-        const ventana = await Windows.findById(id).populate('cambios');
-        res.status(200).json({ cambios: ventana.cambios });
+        const { fecha } = req.params;
+        const cambiosVentana = await Cambio.find({ tipoElemento: 'ventana', fecha: { $gte: fecha, $lt: new Date(fecha).setDate(new Date(fecha).getDate() + 1) } });
+        const idsVentanas = cambiosVentana.map(cambio => cambio.elementoId);
+        res.status(200).json({ idsVentanas });
     } catch (error) {
-        res.status(500).json({ error: 'Hubo un error al obtener los cambios' });
+        res.status(500).json({ error: 'Hubo un error al obtener los cambios de la ventana por fecha' });
+    }
+};
+
+exports.obtenerCommentsVentanaPorFecha = async (req, res) => {
+    try {
+        const { fecha } = req.params;
+        const cambiosCommentVentana = await Cambio.find({ tipoElemento: 'commentVentana', fecha: { $gte: fecha, $lt: new Date(fecha).setDate(new Date(fecha).getDate() + 1) } });
+        const idsComentariosVentanas = cambiosCommentVentana.map(cambio => cambio.elementoId);
+        res.status(200).json({ idsComentariosVentanas });
+    } catch (error) {
+        res.status(500).json({ error: 'Hubo un error al obtener los comentarios de la ventana por fecha' });
     }
 };
 
