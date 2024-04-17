@@ -17,17 +17,9 @@ exports.obtenerCambiosVentanaPorFecha = async (req, res) => {
     try {
         const { fechaInicio, fechaFin } = req.params;
 
-        const startDate = new Date(fechaInicio);
-        const endDate = new Date(fechaFin);
-
-        if (!(startDate instanceof Date && !isNaN(startDate)) || !(endDate instanceof Date && !isNaN(endDate))) {
-            console.error('Las fechas de inicio y fin son requeridas y deben ser objetos Date válidos.');
-            return res.status(400).json({ error: 'Las fechas de inicio y fin son requeridas y deben ser objetos Date válidos.' });
-        }
-
         const cambiosVentana = await Cambio.find({
             tipoElemento: 'ventana',
-            fecha: { $gte: startDate, $lt: endDate }
+            fecha: { $gte: fechaInicio, $lt: fechaFin }
         });
 
         const idsVentanas = cambiosVentana.map(cambio => cambio.elementoId);
@@ -37,8 +29,6 @@ exports.obtenerCambiosVentanaPorFecha = async (req, res) => {
         res.status(500).json({ error: 'Hubo un error al obtener los cambios de ventana por fechas.' });
     }
 };
-
-
 
 
 exports.obtenerCommentsVentanaPorFecha = async (req, res) => {
