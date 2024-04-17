@@ -17,6 +17,9 @@ exports.obtenerCambiosVentanaPorFecha = async (req, res) => {
     try {
         const { fechaInicio, fechaFin } = req.params;
 
+        console.log('Fecha de inicio recibida:', fechaInicio);
+        console.log('Fecha de fin recibida:', fechaFin);
+
         const cambiosVentana = await Cambio.find({
             tipoElemento: 'ventana',
             fecha: { $gte: fechaInicio, $lt: fechaFin }
