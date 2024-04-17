@@ -13,19 +13,23 @@ exports.obtenerCambiosIncidencia = async (req, res) => {
     }
 };
 
-exports.obtenerCambiosVentanaPorFecha = async (req, res) => {
+exports.obtenerCambiosVentanaPorFecha = async (fechaInicio, fechaFin) => {
     try {
-        const { fechaInicio, fechaFin } = req.params;
-        const cambiosVentana = await Cambio.find({
-            tipoElemento: 'ventana',
-            fecha: { $gte: fechaInicio, $lt: fechaFin }
-        });
-        const idsVentanas = cambiosVentana.map(cambio => cambio.elementoId);
-        res.status(200).json({ idsVentanas });
+        // Verificar si las fechas no son undefined
+        if (!fechaInicio || !fechaFin) {
+            console.error('Las fechas de inicio y fin son requeridas.');
+            return;
+        }
+
+        const formattedStartDate = formatDate(fechaInicio);
+        const formattedEndDate = formatDate(fechaFin);
+        const response = await axios.get(`/cambios/ventana/fechas/${formattedStartDate}/${formattedEndDate}`);
+        setIdsVentanas(response.data.idsVentanas);
     } catch (error) {
-        res.status(500).json({ error: 'Hubo un error al obtener los cambios de la ventana por fechas' });
+        console.error('Error al obtener cambios de ventana por fechas:', error);
     }
 };
+
 
 
 exports.obtenerCommentsVentanaPorFecha = async (req, res) => {
