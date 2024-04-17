@@ -13,22 +13,31 @@ exports.obtenerCambiosIncidencia = async (req, res) => {
     }
 };
 
-exports.obtenerCambiosVentanaPorFecha = async (fechaInicio, fechaFin) => {
+exports.obtenerCambiosVentanaPorFecha = async (req, res) => {
     try {
-        // Verificar si las fechas no son undefined
-        if (!fechaInicio || !fechaFin) {
-            console.error('Las fechas de inicio y fin son requeridas.');
-            return;
+        const { fechaInicio, fechaFin } = req.params;
+
+        const startDate = new Date(fechaInicio);
+        const endDate = new Date(fechaFin);
+
+        if (!(startDate instanceof Date && !isNaN(startDate)) || !(endDate instanceof Date && !isNaN(endDate))) {
+            console.error('Las fechas de inicio y fin son requeridas y deben ser objetos Date válidos.');
+            return res.status(400).json({ error: 'Las fechas de inicio y fin son requeridas y deben ser objetos Date válidos.' });
         }
 
-        const formattedStartDate = formatDate(fechaInicio);
-        const formattedEndDate = formatDate(fechaFin);
-        const response = await axios.get(`/cambios/ventana/fechas/${formattedStartDate}/${formattedEndDate}`);
-        setIdsVentanas(response.data.idsVentanas);
+        const cambiosVentana = await Cambio.find({
+            tipoElemento: 'ventana',
+            fecha: { $gte: startDate, $lt: endDate }
+        });
+
+        const idsVentanas = cambiosVentana.map(cambio => cambio.elementoId);
+        res.status(200).json({ idsVentanas });
     } catch (error) {
         console.error('Error al obtener cambios de ventana por fechas:', error);
+        res.status(500).json({ error: 'Hubo un error al obtener los cambios de ventana por fechas.' });
     }
 };
+
 
 
 
