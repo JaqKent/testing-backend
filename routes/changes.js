@@ -10,7 +10,7 @@ router.get('/:cambiosId/:incidenciaId/:commentId', cambiosController.obtenerCamb
 
 router.get('/:ventanaId/:commentId', cambiosController.obtenerCambiosCommentsVentana);
 
-router.get('/ventana/fecha/:fecha', cambiosController.obtenerCambiosVentanaPorFecha);
+router.get('/ventana/fecha/:fechaInicio/:fechaFin', cambiosController.obtenerCambiosVentanaPorFecha);
 
 router.get('/commentsventana/fecha/:fecha', cambiosController.obtenerCommentsVentanaPorFecha);
 

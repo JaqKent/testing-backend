@@ -13,16 +13,20 @@ exports.obtenerCambiosIncidencia = async (req, res) => {
     }
 };
 
-exports.obtenerCambiosVentanaPorFecha = async (req, res) => {
+exports.obtenerCambiosVentanaPorFechas = async (req, res) => {
     try {
-        const { fecha } = req.params;
-        const cambiosVentana = await Cambio.find({ tipoElemento: 'ventana', fecha: { $gte: fecha, $lt: new Date(fecha).setDate(new Date(fecha).getDate() + 1) } });
+        const { fechaInicio, fechaFin } = req.params;
+        const cambiosVentana = await Cambio.find({
+            tipoElemento: 'ventana',
+            fecha: { $gte: fechaInicio, $lt: fechaFin }
+        });
         const idsVentanas = cambiosVentana.map(cambio => cambio.elementoId);
         res.status(200).json({ idsVentanas });
     } catch (error) {
-        res.status(500).json({ error: 'Hubo un error al obtener los cambios de la ventana por fecha' });
+        res.status(500).json({ error: 'Hubo un error al obtener los cambios de la ventana por fechas' });
     }
 };
+
 
 exports.obtenerCommentsVentanaPorFecha = async (req, res) => {
     try {
