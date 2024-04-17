@@ -13,7 +13,7 @@ exports.obtenerCambiosIncidencia = async (req, res) => {
     }
 };
 
-exports.obtenerCambiosVentanaPorFechas = async (req, res) => {
+exports.obtenerCambiosVentanaPorFecha = async (req, res) => {
     try {
         const { fechaInicio, fechaFin } = req.params;
         const cambiosVentana = await Cambio.find({
