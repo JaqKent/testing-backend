@@ -9,4 +9,5 @@ router.get('/:ventanaId', cambiosController.obtenerCambiosVentana);
 router.get('/:cambiosId/:incidenciaId/:commentId', cambiosController.obtenerCambiosCommentsIncidencia);
 router.get('/:ventanaId/:commentId', cambiosController.obtenerCambiosCommentsVentana);
 
+
 module.exports = router;
