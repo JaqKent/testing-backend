@@ -19,6 +19,10 @@ const CambioSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Windows'
     },
+    semana: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Week',
+    },
     incidencias: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Incidencia'

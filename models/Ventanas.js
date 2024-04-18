@@ -62,7 +62,6 @@ const WindowsSchema = mongoose.Schema({
 
 WindowsSchema.pre('findOneAndUpdate', async function () {
     try {
-        // Obtener el documento antes de la actualización y almacenarlo en la instancia
         this._oldDocument = await this.model.findOne(this.getQuery());
     } catch (error) {
         console.error('Error al obtener el documento antes de la actualización:', error);
@@ -71,29 +70,21 @@ WindowsSchema.pre('findOneAndUpdate', async function () {
 
 WindowsSchema.post('findOneAndUpdate', async function (doc) {
     try {
-        // Acceder al documento antes de la actualización desde la instancia
-        const oldDoc = this._oldDocument;
-        console.log('Documento antes de la actualización:', oldDoc);
 
-        // Comparar los valores antes y después de la actualización
+        const oldDoc = this._oldDocument;
         const cambiosRegistrados = [];
 
-        // Obtener los campos existentes en el documento antes de la actualización
         const camposExistentes = Object.keys(oldDoc._doc);
 
-        // Obtener los campos en el documento actualizado
         const camposActualizados = Object.keys(doc._doc);
 
-        // Filtrar los campos que no se deben considerar para la comparación
         const camposIgnorados = ['_id', 'semana', "cambios"];
         const camposAComparar = camposExistentes.filter(campo => !camposIgnorados.includes(campo));
 
-        // Verificar los cambios en los campos existentes
         camposAComparar.forEach(campo => {
             const valorAnterior = oldDoc._doc[campo];
             const valorNuevo = doc[campo];
 
-            // Verificar si el valor ha cambiado
             if (valorAnterior !== valorNuevo) {
                 cambiosRegistrados.push({
                     campo,
@@ -103,10 +94,8 @@ WindowsSchema.post('findOneAndUpdate', async function (doc) {
             }
         });
 
-        // Obtener los campos nuevos en el documento actualizado
         const camposNuevos = camposActualizados.filter(campo => !camposExistentes.includes(campo) && !camposIgnorados.includes(campo));
 
-        // Agregar los campos nuevos como cambios
         camposNuevos.forEach(campo => {
             cambiosRegistrados.push({
                 campo,
@@ -115,13 +104,12 @@ WindowsSchema.post('findOneAndUpdate', async function (doc) {
             });
         });
 
-        // Guardar los cambios en la colección de Cambio
         if (cambiosRegistrados.length > 0) {
-            console.log('Se han registrado cambios:', cambiosRegistrados);
             await Cambio.create({
                 elementoId: doc._id,
                 tipoElemento: 'ventana',
-                cambios: cambiosRegistrados
+                cambios: cambiosRegistrados,
+                semana: doc.semana
             });
         } else {
             console.log('No se han detectado cambios');
