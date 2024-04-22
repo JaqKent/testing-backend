@@ -69,7 +69,7 @@ exports.obtenerCommentsIncidenciaPorFecha = async (req, res) => {
     try {
         const { fechaInicio, fechaFin } = req.params;
 
-        const comentariosIncidencia = await CommentsIncidencia.find({
+        const comentariosIncidencia = await Cambio.find({
             tipoElemento: 'commentIncidencia',
             fecha: { $gte: fechaInicio, $lt: fechaFin }
         });
@@ -81,6 +81,8 @@ exports.obtenerCommentsIncidenciaPorFecha = async (req, res) => {
         res.status(500).json({ error: 'Hubo un error al obtener los comentarios de incidencia por fechas.' });
     }
 };
+
+
 
 exports.obtenerCambioVentanaPorId = async (req, res) => {
     try {
@@ -137,7 +139,7 @@ exports.obtenerCommentIncidenciaPorId = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const commentIncidencia = await CommentsIncidencia.findById(id);
+        const commentIncidencia = await Cambio.findById(id);
 
         if (!commentIncidencia) {
             return res.status(404).json({ error: 'Comentario de incidencia no encontrado' });
