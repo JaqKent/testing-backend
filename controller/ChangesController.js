@@ -30,7 +30,7 @@ exports.obtenerCambiosVentanaPorFecha = async (req, res) => {
 
 exports.obtenerCommentsVentanaPorFecha = async (req, res) => {
     try {
-        const { fechaInicio, fechaFin } = req.params;
+        let { fechaInicio, fechaFin } = req.params;
 
         fechaInicio = new Date(fechaInicio);
         fechaFin = new Date(fechaFin);
@@ -56,7 +56,7 @@ exports.obtenerCommentsVentanaPorFecha = async (req, res) => {
 
 exports.obtenerCambiosIncidenciaPorFecha = async (req, res) => {
     try {
-        const { fechaInicio, fechaFin } = req.params;
+        let { fechaInicio, fechaFin } = req.params;
 
         fechaInicio = new Date(fechaInicio);
         fechaFin = new Date(fechaFin);
@@ -79,7 +79,7 @@ exports.obtenerCambiosIncidenciaPorFecha = async (req, res) => {
 
 exports.obtenerCommentsIncidenciaPorFecha = async (req, res) => {
     try {
-        const { fechaInicio, fechaFin } = req.params;
+        let { fechaInicio, fechaFin } = req.params;
 
         fechaInicio = new Date(fechaInicio);
         fechaFin = new Date(fechaFin);
