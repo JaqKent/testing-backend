@@ -32,6 +32,10 @@ exports.obtenerCommentsVentanaPorFecha = async (req, res) => {
     try {
         const { fechaInicio, fechaFin } = req.params;
 
+        fechaInicio = new Date(fechaInicio);
+        fechaFin = new Date(fechaFin);
+
+
         fechaFin.setDate(fechaFin.getDate() + 1);
 
         const comentariosVentana = await Cambio.find({
@@ -54,6 +58,10 @@ exports.obtenerCambiosIncidenciaPorFecha = async (req, res) => {
     try {
         const { fechaInicio, fechaFin } = req.params;
 
+        fechaInicio = new Date(fechaInicio);
+        fechaFin = new Date(fechaFin);
+
+
         fechaFin.setDate(fechaFin.getDate() + 1);
 
         const cambiosIncidencia = await Cambio.find({
@@ -72,6 +80,10 @@ exports.obtenerCambiosIncidenciaPorFecha = async (req, res) => {
 exports.obtenerCommentsIncidenciaPorFecha = async (req, res) => {
     try {
         const { fechaInicio, fechaFin } = req.params;
+
+        fechaInicio = new Date(fechaInicio);
+        fechaFin = new Date(fechaFin);
+
 
         fechaFin.setDate(fechaFin.getDate() + 1);
 
