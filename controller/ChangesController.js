@@ -32,6 +32,8 @@ exports.obtenerCommentsVentanaPorFecha = async (req, res) => {
     try {
         const { fechaInicio, fechaFin } = req.params;
 
+        fechaFin.setDate(fechaFin.getDate() + 1);
+
         const comentariosVentana = await Cambio.find({
             tipoElemento: 'commentVentana',
             fecha: { $gte: fechaInicio, $lt: fechaFin }
@@ -52,6 +54,8 @@ exports.obtenerCambiosIncidenciaPorFecha = async (req, res) => {
     try {
         const { fechaInicio, fechaFin } = req.params;
 
+        fechaFin.setDate(fechaFin.getDate() + 1);
+
         const cambiosIncidencia = await Cambio.find({
             tipoElemento: 'incidencia',
             fecha: { $gte: fechaInicio, $lt: fechaFin }
@@ -68,6 +72,8 @@ exports.obtenerCambiosIncidenciaPorFecha = async (req, res) => {
 exports.obtenerCommentsIncidenciaPorFecha = async (req, res) => {
     try {
         const { fechaInicio, fechaFin } = req.params;
+
+        fechaFin.setDate(fechaFin.getDate() + 1);
 
         const comentariosIncidencia = await Cambio.find({
             tipoElemento: 'commentIncidencia',
