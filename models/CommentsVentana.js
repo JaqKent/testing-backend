@@ -21,7 +21,27 @@ const CommentsVentanaSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Windows'
     },
+    semana: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Week'
+    }
+
 })
+
+CommentsVentanaSchema.pre('save', async function (next) {
+    try {
+        // Obtener la ventana asociada con el comentario
+        const ventana = await Windows.findById(this.ventanas);
+
+        // Guardar la semana asociada con la ventana en el comentario
+        this.semana = ventana.semana;
+
+        next();
+    } catch (error) {
+        console.error('Error al guardar la semana:', error);
+        next(error);
+    }
+});
 CommentsVentanaSchema.post('save', async function (doc) {
     try {
         // Crear un nuevo documento de cambio
@@ -32,7 +52,8 @@ CommentsVentanaSchema.post('save', async function (doc) {
                 campo: 'comentario',
                 valorNuevo: doc.update
             }],
-            ventana: doc.ventanas
+            ventana: doc.ventanas,
+            semana: doc.semana
         });
 
         // Guardar el nuevo documento de cambio

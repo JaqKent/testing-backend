@@ -1,19 +1,12 @@
-const Incidencia = require('../models/Incidencia');
 const Cambio = require("../models/Changes");
-const CommentsIncidencia = require("../models/CommentsIncidencias");
-const CommentsVentana = require("../models/CommentsVentana");
-
 
 
 exports.obtenerCambiosVentanaPorFecha = async (req, res) => {
     try {
         let { fechaInicio, fechaFin } = req.params;
 
-        fechaInicio = new Date(fechaInicio);
-        fechaFin = new Date(fechaFin);
-
-
-        fechaFin.setDate(fechaFin.getDate() + 1);
+        fechaInicio = new Date(`${fechaInicio}T00:00:00Z`);
+        fechaFin = new Date(`${fechaFin}T23:59:59Z`);
 
         const cambiosVentana = await Cambio.find({
             tipoElemento: 'ventana',
@@ -28,17 +21,22 @@ exports.obtenerCambiosVentanaPorFecha = async (req, res) => {
     }
 };
 
+
 exports.obtenerCommentsVentanaPorFecha = async (req, res) => {
     try {
-        const { fechaInicio, fechaFin } = req.params;
+        let { fechaInicio, fechaFin } = req.params;
+
+        fechaInicio = new Date(`${fechaInicio}T00:00:00Z`);
+        fechaFin = new Date(`${fechaFin}T23:59:59Z`);
+
 
         const comentariosVentana = await Cambio.find({
             tipoElemento: 'commentVentana',
             fecha: { $gte: fechaInicio, $lt: fechaFin }
         });
 
-        const idsComentariosVentanas = comentariosVentana.map(comentario => comentario._id);
-        res.status(200).json({ idsComentariosVentanas });
+        const idsCambiosCommetsVentanas = comentariosVentana.map(cambio => cambio._id);
+        res.status(200).json({ idsCambiosCommetsVentanas });
     } catch (error) {
         console.error('Error al obtener comentarios de ventana por fechas:', error);
         res.status(500).json({ error: 'Hubo un error al obtener los comentarios de ventana por fechas.' });
@@ -47,10 +45,33 @@ exports.obtenerCommentsVentanaPorFecha = async (req, res) => {
 
 
 
+exports.obtenerCommentsIncidenciaPorFecha = async (req, res) => {
+    try {
+        let { fechaInicio, fechaFin } = req.params;
+
+        fechaInicio = new Date(`${fechaInicio}T00:00:00Z`);
+        fechaFin = new Date(`${fechaFin}T23:59:59Z`);
+
+        const commentsIncidencia = await Cambio.find({
+            tipoElemento: 'commentIncidencia',
+            fecha: { $gte: fechaInicio, $lt: fechaFin }
+        });
+
+        const idsCambiosCommetsIncidencias = commentsIncidencia.map(cambio => cambio._id);
+        res.status(200).json({ idsCambiosCommetsIncidencias });
+    } catch (error) {
+        console.error('Error al obtener cambios de incidencia por fechas:', error);
+        res.status(500).json({ error: 'Hubo un error al obtener los cambios de incidencia por fechas.' });
+    }
+};
+
 
 exports.obtenerCambiosIncidenciaPorFecha = async (req, res) => {
     try {
-        const { fechaInicio, fechaFin } = req.params;
+        let { fechaInicio, fechaFin } = req.params;
+
+        fechaInicio = new Date(`${fechaInicio}T00:00:00Z`);
+        fechaFin = new Date(`${fechaFin}T23:59:59Z`);
 
         const cambiosIncidencia = await Cambio.find({
             tipoElemento: 'incidencia',
@@ -62,29 +83,6 @@ exports.obtenerCambiosIncidenciaPorFecha = async (req, res) => {
     } catch (error) {
         console.error('Error al obtener cambios de incidencia por fechas:', error);
         res.status(500).json({ error: 'Hubo un error al obtener los cambios de incidencia por fechas.' });
-    }
-};
-
-exports.obtenerCommentsIncidenciaPorFecha = async (req, res) => {
-    try {
-        let { fechaInicio, fechaFin } = req.params;
-
-        fechaInicio = new Date(fechaInicio);
-        fechaFin = new Date(fechaFin);
-
-
-        fechaFin.setDate(fechaFin.getDate() + 0);
-
-        const comentariosIncidencia = await Cambio.find({
-            tipoElemento: 'commentIncidencia',
-            fecha: { $gte: fechaInicio, $lt: fechaFin }
-        });
-
-        const idsCambiosCommetsIncidencias = comentariosIncidencia.map(cambio => cambio._id);
-        res.status(200).json({ idsCambiosCommetsIncidencias });
-    } catch (error) {
-        console.error('Error al obtener comentarios de incidencia por fechas:', error);
-        res.status(500).json({ error: 'Hubo un error al obtener los comentarios de incidencia por fechas.' });
     }
 };
 
