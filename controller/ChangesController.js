@@ -81,11 +81,6 @@ exports.obtenerCommentsIncidenciaPorFecha = async (req, res) => {
     try {
         let { fechaInicio, fechaFin } = req.params;
 
-        fechaInicio = new Date(fechaInicio);
-        fechaFin = new Date(fechaFin);
-
-
-        fechaFin.setDate(fechaFin.getDate() + 1);
 
         const comentariosIncidencia = await Cambio.find({
             tipoElemento: 'commentIncidencia',
