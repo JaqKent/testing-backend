@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
-const noteSchema = mongoose.Schema({
+const noteSchema = new mongoose.Schema({
     title: {
         type: String,
         default: '',
@@ -10,19 +10,17 @@ const noteSchema = mongoose.Schema({
         type: String,
         default: ''
     },
-    workspace: {
-        type: String,
-        default: 'workspace by default'
-    },
-    createBy: {
-        type: mongoose.Schema.ObjectId, ref: 'user'
+    usuarioCreador: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Usuario'
     },
     createDate: {
-        type: Date
-
+        type: Date,
+        default: Date.now
     },
     updateDate: {
-        type: Date
+        type: Date,
+        default: Date.now
     },
     active: {
         type: Boolean,
@@ -39,12 +37,7 @@ const noteSchema = mongoose.Schema({
     ejeY: {
         type: Number,
         default: 20
-    },
-    image: {
-        type: String,
-        default: ''
     }
 });
-const note = mongoose.model('note', noteSchema);
 
-export default note;
+module.exports = mongoose.model('Note', noteSchema);
