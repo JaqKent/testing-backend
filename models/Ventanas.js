@@ -10,46 +10,46 @@ const WindowsSchema = mongoose.Schema({
     solicitante: {
         type: String,
         trim: true,
-        required: true
+
     },
     descripcion: {
         type: String
     },
     estado: {
         type: String,
-        required: true
+
     },
     fechaImplementacion: {
         type: String,
-        required: true
+
     },
     urgencia: {
         type: String,
-        required: true
+
     },
     crq: {
         type: String,
-        required: true
+
     },
     ejecutaTarea: {
         type: String,
-        required: true
+
     },
     controla: {
         type: String,
-        required: true
+
     },
     pruebasPost: {
         type: String,
-        required: true
+
     },
     afectaIdp: {
         type: String,
-        required: true
+
     },
     impactoNotificacion: {
         type: String,
-        required: true
+
     },
     enBacklog: { type: Boolean, default: false },
 
